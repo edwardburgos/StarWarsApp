@@ -1,6 +1,9 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -47,7 +50,13 @@ android {
     }
 }
 
+//apollo {
+//    packageName.set("com.example")
+//}
+
 dependencies {
+    implementation project(path: ':data')
+    implementation project(path: ':usecases')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -62,4 +71,35 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    // FlowLayout
+    implementation "com.google.accompanist:accompanist-flowlayout:$accompanist_extension_librarie_version"
+
+    // Compose Navigation
+    implementation "androidx.navigation:navigation-compose:$compose_navigation_version"
+
+    // Apollo GraphQL
+    implementation "com.apollographql.apollo3:apollo-runtime:$apollo_graphql_version"
+
+    // System UI Controller
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_extension_librarie_version"
+
+    // Coil
+    implementation "io.coil-kt:coil-compose:$coil_version"
+
+    // Coil support for gifs
+    implementation "io.coil-kt:coil-gif:$coil_version"
+
+    // More Material Icons
+    implementation "androidx.compose.material:material-icons-extended:$material_icons_version"
+
+    // Swiperefresh Accompanist
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_extension_librarie_version"
+
+    // Hilt with Compose Navigation
+    implementation "androidx.hilt:hilt-navigation-compose:$navigation_hilt_compose_version"
 }
