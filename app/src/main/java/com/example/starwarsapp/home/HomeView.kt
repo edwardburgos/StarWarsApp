@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.navigation.NavController
 import com.example.data.network.model.ResponseStatus
 import com.example.data.repository.model.GetCharactersResponse
 import com.example.starwarsapp.composables.CharactersCards
@@ -14,6 +15,7 @@ import com.example.starwarsapp.composables.CharactersCards
 @ExperimentalComposeUiApi
 @Composable
 fun Home(
+    navController: NavController,
     viewModel: HomeViewModel,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
@@ -28,6 +30,7 @@ fun Home(
 
     response.characters?.let {
         CharactersCards(
+            { id -> navController.navigate("detail/$id") },
             it,
             keyboardController,
             focusManager,

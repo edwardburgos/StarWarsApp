@@ -20,7 +20,8 @@ import com.example.starwarsapp.CharactersListQuery
 @ExperimentalComposeUiApi
 @Composable
 fun CharactersCard(
-    item: CharactersListQuery.Person?,
+    navigate: (String) -> Unit,
+    item: CharactersListQuery.Person,
     index: Int,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
@@ -39,6 +40,11 @@ fun CharactersCard(
                     onPress = {
                         keyboardController?.hide()
                         focusManager.clearFocus()
+                    },
+                    onTap = {
+                        navigate(item.id)
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
                     }
                 )
             }
@@ -48,19 +54,17 @@ fun CharactersCard(
         Column(
             modifier = Modifier.padding(10.dp)
         ) {
-            item?.let {
-                it.name?.let { name ->
-                    Text(text = name, style = MaterialTheme.typography.h6)
-                }
-                it.homeworld?.let { homeworld ->
-                    item.species?.let { specie ->
-                        Text(
-                            text = "$specie from $homeworld",
-                            style = MaterialTheme.typography.body2
-                        )
-                    } ?: run {
-                        Text(text = "Human from $homeworld", style = MaterialTheme.typography.body2)
-                    }
+            item.name?.let { name ->
+                Text(text = name, style = MaterialTheme.typography.h6)
+            }
+            item.homeworld?.let { homeworld ->
+                item.species?.let { specie ->
+                    Text(
+                        text = "$specie from $homeworld",
+                        style = MaterialTheme.typography.body2
+                    )
+                } ?: run {
+                    Text(text = "Human from $homeworld", style = MaterialTheme.typography.body2)
                 }
             }
         }

@@ -1,0 +1,14 @@
+query Character( $characterId: ID!) {
+    person (id: $characterId ) {
+        id
+        eyeColor
+        hairColor
+        skinColor
+        birthYear
+        vehicleConnection {
+            vehicles {
+                name
+            }
+        }
+    }
+}

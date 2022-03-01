@@ -14,6 +14,7 @@ import com.example.starwarsapp.CharactersListQuery
 @ExperimentalComposeUiApi
 @Composable
 fun CharactersCards(
+    navigate: (String) -> Unit,
     items: List<CharactersListQuery.Person?>,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
@@ -24,13 +25,16 @@ fun CharactersCards(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(items.size) { index ->
-            CharactersCard(
-                items.elementAt(index),
-                index,
-                keyboardController,
-                focusManager,
-                configuration
-            )
+            items.elementAt(index)?.let {
+                CharactersCard(
+                    navigate,
+                    it,
+                    index,
+                    keyboardController,
+                    focusManager,
+                    configuration
+                )
+            }
         }
     }
 }

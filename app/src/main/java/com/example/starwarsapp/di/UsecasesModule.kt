@@ -13,4 +13,9 @@ class UsecasesModule {
     fun providesGetCharactersUseCaseImpl(getCharactersUseCaseImpl: GetCharactersUseCaseImpl): GetCharactersUseCase {
         return getCharactersUseCaseImpl
     }
+
+    @Provides
+    fun providesGetCharacterUseCaseImpl(getCharacterUseCaseImpl: GetCharacterUseCaseImpl): GetCharacterUseCase {
+        return getCharacterUseCaseImpl
+    }
 }
