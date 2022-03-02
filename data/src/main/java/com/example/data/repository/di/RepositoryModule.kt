@@ -1,4 +1,4 @@
-package com.example.starwarsapp.di
+package com.example.data.repository.di
 
 import com.example.data.repository.CharactersRepository
 import com.example.data.repository.CharactersRepositoryImpl

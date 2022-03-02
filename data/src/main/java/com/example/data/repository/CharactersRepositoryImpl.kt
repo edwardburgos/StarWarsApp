@@ -1,6 +1,8 @@
 package com.example.data.repository
 
 import com.apollographql.apollo3.ApolloClient
+import com.example.data.database.CharactersDao
+import com.example.data.database.model.CharacterMapper
 import com.example.data.network.model.ResponseStatus
 import com.example.data.repository.model.GetCharacterResponse
 import com.example.data.repository.model.GetCharactersResponse
@@ -15,7 +17,9 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class CharactersRepositoryImpl @Inject constructor(
-    private val apolloClient: ApolloClient
+    private val apolloClient: ApolloClient,
+    private val charactersDao: CharactersDao,
+    private val characterMapper: CharacterMapper,
 ) : CharactersRepository {
 
     override fun getCharacters(): Flow<GetCharactersResponse> {
@@ -74,6 +78,13 @@ class CharactersRepositoryImpl @Inject constructor(
                     kotlinx.coroutines.delay(refreshIntervalMsLong)
                 }
             }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override fun saveCharacter(character: CharactersListQuery.Person): Flow<ResponseStatus> {
+        return flow {
+            charactersDao.addFavorite(character = characterMapper.mapFromDomainModel(character))
+            emit(ResponseStatus.SUCCESSFUL)
         }.flowOn(Dispatchers.IO)
     }
 }

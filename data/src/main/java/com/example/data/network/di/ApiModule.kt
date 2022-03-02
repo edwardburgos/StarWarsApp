@@ -1,4 +1,4 @@
-package com.example.starwarsapp.di
+package com.example.data.network.di
 
 import android.os.Looper
 import com.apollographql.apollo3.ApolloClient

@@ -3,11 +3,12 @@ package com.example.starwarsapp.composables
 import android.content.res.Configuration
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -25,7 +26,8 @@ fun CharactersCard(
     index: Int,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    configuration: Configuration
+    configuration: Configuration,
+    insert: (CharactersListQuery.Person) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -51,20 +53,31 @@ fun CharactersCard(
             .fillMaxWidth(if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 0.5f else 1f),
         elevation = 4.dp
     ) {
-        Column(
-            modifier = Modifier.padding(10.dp)
-        ) {
-            item.name?.let { name ->
-                Text(text = name, style = MaterialTheme.typography.h6)
-            }
-            item.homeworld?.let { homeworld ->
-                item.species?.let { specie ->
-                    Text(
-                        text = "$specie from $homeworld",
-                        style = MaterialTheme.typography.body2
+        Row {
+            Column {
+                IconButton(onClick = { insert(item) }) {
+                    Icon(
+                        Icons.Filled.StarBorder,
+                        contentDescription = "Set as favorite",
+                        tint = MaterialTheme.colors.primary
                     )
-                } ?: run {
-                    Text(text = "Human from $homeworld", style = MaterialTheme.typography.body2)
+                }
+            }
+            Column(
+                modifier = Modifier.padding(10.dp)
+            ) {
+                item.name?.let { name ->
+                    Text(text = name, style = MaterialTheme.typography.h6)
+                }
+                item.homeworld?.let { homeworld ->
+                    item.species?.let { specie ->
+                        Text(
+                            text = "$specie from $homeworld",
+                            style = MaterialTheme.typography.body2
+                        )
+                    } ?: run {
+                        Text(text = "Human from $homeworld", style = MaterialTheme.typography.body2)
+                    }
                 }
             }
         }

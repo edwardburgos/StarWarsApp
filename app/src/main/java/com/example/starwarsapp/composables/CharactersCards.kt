@@ -18,7 +18,8 @@ fun CharactersCards(
     items: List<CharactersListQuery.Person?>,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    configuration: Configuration
+    configuration: Configuration,
+    insert: (CharactersListQuery.Person) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -32,7 +33,8 @@ fun CharactersCards(
                     index,
                     keyboardController,
                     focusManager,
-                    configuration
+                    configuration,
+                    insert
                 )
             }
         }

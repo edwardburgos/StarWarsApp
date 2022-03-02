@@ -1,6 +1,7 @@
 package com.example.starwarsapp.home
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -28,13 +29,18 @@ fun Home(
         )
     )
 
-    response.characters?.let {
-        CharactersCards(
-            { id -> navController.navigate("detail/$id") },
-            it,
-            keyboardController,
-            focusManager,
-            configuration
-        )
+    if (response.status == ResponseStatus.INITIAL) viewModel.updateGetCharacters()
+
+    Column {
+        response.characters?.let {
+            CharactersCards(
+                { id -> navController.navigate("detail/$id") },
+                it,
+                keyboardController,
+                focusManager,
+                configuration,
+                { character -> viewModel.newEmition(character) }
+            )
+        }
     }
 }
