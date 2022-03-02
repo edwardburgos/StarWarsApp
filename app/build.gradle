@@ -57,6 +57,7 @@ android {
 dependencies {
     implementation project(path: ':data')
     implementation project(path: ':usecases')
+    implementation project(path: ':domain')
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
@@ -81,10 +82,7 @@ dependencies {
 
     // Compose Navigation
     implementation "androidx.navigation:navigation-compose:$compose_navigation_version"
-
-    // Apollo GraphQL
-    implementation "com.apollographql.apollo3:apollo-runtime:$apollo_graphql_version"
-
+    
     // System UI Controller
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_extension_librarie_version"
 
