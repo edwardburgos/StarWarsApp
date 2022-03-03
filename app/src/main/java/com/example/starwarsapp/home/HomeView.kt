@@ -28,20 +28,8 @@ fun Home(
     configuration: Configuration
 ) {
 
-    val userListItems: LazyPagingItems<CharactersListQuery.Person> =
+    val characters: LazyPagingItems<CharactersListQuery.Person> =
         viewModel.characters.collectAsLazyPagingItems()
-
-    val characters by viewModel.characters.collectAsState(
-        initial = listOf(
-            CharacterEntity(
-                id = "",
-                name = null,
-                species = null,
-                homeworld = null,
-                updatedAt = Date()
-            )
-        )
-    )
 
     val charactersDatabase by viewModel.getCharactersDatabase.collectAsState(
         initial = listOf(
@@ -67,7 +55,7 @@ fun Home(
     Column {
         CharactersCards(
             { id -> navController.navigate("detail/$id") },
-            userListItems,
+            characters,
             keyboardController,
             focusManager,
             configuration,
