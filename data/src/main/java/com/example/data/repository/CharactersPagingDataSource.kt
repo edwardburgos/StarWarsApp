@@ -4,16 +4,29 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
+import com.example.data.database.CharactersDao
+import com.example.data.database.model.CharacterMapper
 import com.example.starwarsapp.CharactersListQuery
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CharactersPagingDataSource @Inject constructor(
     private val apolloClient: ApolloClient,
+    private val charactersDao: CharactersDao,
+    private val characterMapper: CharacterMapper
 ) : PagingSource<String, CharactersListQuery.Person>() {
     override suspend fun load(params: LoadParams<String>): LoadResult<String, CharactersListQuery.Person> {
         val afterParam = params.key ?: ""
         return try {
             val response = apolloClient.query(CharactersListQuery(Optional.presentIfNotNull(5), Optional.presentIfNotNull(afterParam))).execute()
+            CoroutineScope(Dispatchers.IO).launch {
+                response.data?.allPeople?.people?.forEach {
+                    it?.let { character -> charactersDao.addFavorite(character = characterMapper.mapFromDomainModel(character)) }
+                }
+            }
             val pagedResponse = response.data
             val data = pagedResponse?.allPeople
 
