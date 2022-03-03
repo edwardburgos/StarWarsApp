@@ -100,4 +100,10 @@ dependencies {
 
     // Hilt with Compose Navigation
     implementation "androidx.hilt:hilt-navigation-compose:$navigation_hilt_compose_version"
+
+    // Pagination3
+    implementation "androidx.paging:paging-runtime:$paging_version"
+
+    // Pagination for Compose
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
 }

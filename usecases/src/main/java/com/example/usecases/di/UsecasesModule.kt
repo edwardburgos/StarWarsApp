@@ -27,4 +27,10 @@ class UsecasesModule {
     fun providesInsertCharacterUseCaseImpl(insertCharacterUseCaseImpl: InsertCharacterUseCaseImpl): InsertCharacterUseCase {
         return insertCharacterUseCaseImpl
     }
+
+    @Singleton
+    @Provides
+    fun providesGetCharactersDatabaseUseCaseImpl(getCharactersDatabaseUseCase: GetCharactersDatabaseUseCaseImpl): GetCharactersDatabaseUseCase {
+        return getCharactersDatabaseUseCase
+    }
 }

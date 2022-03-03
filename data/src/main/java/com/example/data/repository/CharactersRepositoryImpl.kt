@@ -2,6 +2,7 @@ package com.example.data.repository
 
 import com.apollographql.apollo3.ApolloClient
 import com.example.data.database.CharactersDao
+import com.example.data.database.model.CharacterEntity
 import com.example.data.database.model.CharacterMapper
 import com.example.data.network.model.ResponseStatus
 import com.example.data.repository.model.GetCharacterResponse
@@ -86,5 +87,9 @@ class CharactersRepositoryImpl @Inject constructor(
             charactersDao.addFavorite(character = characterMapper.mapFromDomainModel(character))
             emit(ResponseStatus.SUCCESSFUL)
         }.flowOn(Dispatchers.IO)
+    }
+
+    override fun getCharactersFromDatabase(): Flow<List<CharacterEntity>> {
+        return charactersDao.getFavorites()
     }
 }

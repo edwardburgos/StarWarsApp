@@ -23,7 +23,7 @@ import com.example.starwarsapp.CharactersListQuery
 fun CharactersCard(
     navigate: (String) -> Unit,
     item: CharactersListQuery.Person,
-    index: Int,
+    first: Boolean,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
     configuration: Configuration,
@@ -33,7 +33,7 @@ fun CharactersCard(
         modifier = Modifier
             .padding(
                 start = 16.dp,
-                top = if (index == 0) 16.dp else 0.dp,
+                top = if (first) 16.dp else 0.dp,
                 end = 16.dp,
                 bottom = 16.dp
             )

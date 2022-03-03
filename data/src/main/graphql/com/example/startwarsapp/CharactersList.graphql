@@ -1,5 +1,5 @@
-query CharactersList {
-    allPeople {
+query CharactersList ( $first: Int, $after: String) {
+    allPeople (first: $first, after: $after) {
         people {
             id
             name
@@ -10,5 +10,10 @@ query CharactersList {
                 name
             }
         }
+        pageInfo {
+            endCursor
+            hasNextPage
+        }
+        totalCount
     }
 }
