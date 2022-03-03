@@ -18,6 +18,7 @@ import com.example.starwarsapp.CharactersListQuery
 fun CharactersCards(
     navigate: (String) -> Unit,
     items: LazyPagingItems<CharactersListQuery.Person>,
+    favoriteCharactersIds: List<String>,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
     configuration: Configuration,
@@ -32,6 +33,7 @@ fun CharactersCards(
                 CharactersCard(
                     navigate,
                     it,
+                    favoriteCharactersIds.indexOf(it.id) != -1,
                     item == items[0],
                     keyboardController,
                     focusManager,

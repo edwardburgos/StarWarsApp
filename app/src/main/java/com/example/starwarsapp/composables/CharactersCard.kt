@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -23,6 +24,7 @@ import com.example.starwarsapp.CharactersListQuery
 fun CharactersCard(
     navigate: (String) -> Unit,
     item: CharactersListQuery.Person,
+    favorite: Boolean,
     first: Boolean,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
@@ -57,7 +59,7 @@ fun CharactersCard(
             Column {
                 IconButton(onClick = { insert(item) }) {
                     Icon(
-                        Icons.Filled.StarBorder,
+                        if (favorite) Icons.Filled.Star else Icons.Filled.StarBorder,
                         contentDescription = "Set as favorite",
                         tint = MaterialTheme.colors.primary
                     )

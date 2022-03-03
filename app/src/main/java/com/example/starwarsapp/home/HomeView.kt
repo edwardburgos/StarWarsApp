@@ -56,6 +56,7 @@ fun Home(
         CharactersCards(
             { id -> navController.navigate("detail/$id") },
             characters,
+            charactersDatabase.map { character -> character.id },
             keyboardController,
             focusManager,
             configuration,
