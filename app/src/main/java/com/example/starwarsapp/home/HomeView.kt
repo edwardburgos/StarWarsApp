@@ -43,7 +43,7 @@ fun Home(
                 vehicles = null,
                 species = null,
                 homeworld = null,
-                markedAsFavoriteAt = Date(),
+                markedAsFavoriteAt = null,
                 favorite = false
             )
         )

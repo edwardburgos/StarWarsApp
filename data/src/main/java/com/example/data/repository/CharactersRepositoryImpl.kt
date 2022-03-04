@@ -84,7 +84,7 @@ class CharactersRepositoryImpl @Inject constructor(
     override fun checkUncheckAsFavorite(id: String): Flow<ResponseStatus> {
         return flow {
             if (charactersDao.getFavoritesOnce().map { character -> character.id }.indexOf(id) == -1) {
-                charactersDao.favoriteTrue(id)
+                charactersDao.favoriteTrue(id, System.currentTimeMillis())
             } else {
                 charactersDao.favoriteFalse(id)
             }

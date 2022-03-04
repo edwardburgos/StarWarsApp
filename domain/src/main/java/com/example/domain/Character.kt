@@ -1,7 +1,5 @@
 package com.example.domain
 
-import java.util.*
-
 data class Character (
     var id: String,
     var name: String?,
@@ -13,5 +11,5 @@ data class Character (
     var species: String?,
     var homeworld: String?,
     var favorite: Boolean,
-    var markedAsFavoriteAt: Date?
+    var markedAsFavoriteAt: Long?
 )

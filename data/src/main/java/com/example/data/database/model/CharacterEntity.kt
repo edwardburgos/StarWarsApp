@@ -38,5 +38,5 @@ data class CharacterEntity (
     var favorite: Boolean,
 
     @ColumnInfo
-    var markedAsFavoriteAt: Date?
+    var markedAsFavoriteAt: Long?
 )

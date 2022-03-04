@@ -65,9 +65,9 @@ interface CharactersDao {
         vehicles: List<String>?
     )
 
-    @Query("UPDATE character_table SET favorite = 1 WHERE id = :id")
-    fun favoriteTrue(id: String)
+    @Query("UPDATE character_table SET favorite = 1, markedAsFavoriteAt = :markedAsFavoriteAt WHERE id = :id")
+    fun favoriteTrue(id: String, markedAsFavoriteAt: Long)
 
-    @Query("UPDATE character_table SET favorite = 0 WHERE id = :id")
+    @Query("UPDATE character_table SET favorite = 0, markedAsFavoriteAt = null WHERE id = :id")
     fun favoriteFalse(id: String)
 }
