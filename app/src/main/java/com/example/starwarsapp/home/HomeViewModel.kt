@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
 
     var query = mutableStateOf("")
 
-    val characters: Flow<PagingData<CharactersListQuery.Person>> = getPagerUseCase.invoke(false).cachedIn(viewModelScope)
+    val characters: Flow<PagingData<CharactersListQuery.Person>> = getPagerUseCase.invoke().cachedIn(viewModelScope)
     val getFavoriteCharacters = getFavoriteCharactersUseCase.invoke()
 
     val getCharacters =

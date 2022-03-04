@@ -47,7 +47,8 @@ fun CharactersCard(
                         }
                     )
                 }
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            backgroundColor = MaterialTheme.colors.background
         ) {
             Row(
                 modifier = Modifier.height(IntrinsicSize.Min),
@@ -74,18 +75,20 @@ fun CharactersCard(
                             modifier = Modifier.padding(vertical = 16.dp)
                         ) {
                             item.name?.let { name ->
-                                Text(text = name, style = MaterialTheme.typography.h6)
+                                Text(text = name, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.primary)
                             }
                             item.homeworld?.let { homeworld ->
                                 item.species?.let { specie ->
                                     Text(
                                         text = "${specie.name} from ${homeworld.name}",
-                                        style = MaterialTheme.typography.body2
+                                        style = MaterialTheme.typography.body2,
+                                        color = MaterialTheme.colors.primary
                                     )
                                 } ?: run {
                                     Text(
                                         text = "Human from ${homeworld.name}",
-                                        style = MaterialTheme.typography.body2
+                                        style = MaterialTheme.typography.body2,
+                                        color = MaterialTheme.colors.primary
                                     )
                                 }
                             }

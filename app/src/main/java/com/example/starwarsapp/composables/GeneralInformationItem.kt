@@ -25,6 +25,6 @@ fun GeneralInformationItem(section: InformationSection, value: String) {
             color = Color.Gray,
             fontWeight = FontWeight.Bold
         )
-        Text(text = value.replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.h6, fontWeight = FontWeight.Bold)
+        Text(text = value.replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.h6, fontWeight = FontWeight.Bold, color = MaterialTheme.colors.primary)
     }
 }

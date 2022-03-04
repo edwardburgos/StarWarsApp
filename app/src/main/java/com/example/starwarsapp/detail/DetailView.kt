@@ -82,7 +82,8 @@ fun Detail(
                     text = "General Information",
                     style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    color = MaterialTheme.colors.primary
                 )
                 it.eyeColor?.let { eyeColor ->
                     if (nullableValues.indexOf(eyeColor) == -1) {
@@ -126,7 +127,8 @@ fun Detail(
                             text = "Vehicles",
                             style = MaterialTheme.typography.h6,
                             fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(bottom = 8.dp, top = 16.dp)
+                            modifier = Modifier.padding(bottom = 8.dp, top = 16.dp),
+                            color = MaterialTheme.colors.primary
                         )
                         vehicles.forEach { vehicle ->
                             vehicle?.name?.let { name ->
