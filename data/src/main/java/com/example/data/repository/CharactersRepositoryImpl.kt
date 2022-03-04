@@ -64,6 +64,14 @@ class CharactersRepositoryImpl @Inject constructor(
                     if (result.data != null) {
                         result.dataAssertNoErrors.person?.let {
                             finalResponse = GetCharacterResponse(ResponseStatus.SUCCESSFUL, it)
+                            charactersDao.updateCharacterDetails(
+                                it.id,
+                                it.eyeColor,
+                                it.hairColor,
+                                it.skinColor,
+                                it.birthYear,
+                                it.vehicleConnection?.vehicles?.mapNotNull { vehicle -> vehicle?.name }
+                            )
                         }
                     } else {
                         finalResponse = errorResponse
@@ -83,7 +91,8 @@ class CharactersRepositoryImpl @Inject constructor(
 
     override fun checkUncheckAsFavorite(id: String): Flow<ResponseStatus> {
         return flow {
-            if (charactersDao.getFavoritesOnce().map { character -> character.id }.indexOf(id) == -1) {
+            if (charactersDao.getFavoritesOnce().map { character -> character.id }
+                    .indexOf(id) == -1) {
                 charactersDao.favoriteTrue(id, System.currentTimeMillis())
             } else {
                 charactersDao.favoriteFalse(id)
