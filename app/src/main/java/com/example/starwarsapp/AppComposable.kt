@@ -31,7 +31,6 @@ fun AppComposable(imageLoader: ImageLoader) {
                 homeviewModel,
                 keyboardController,
                 focusManager,
-                configuration,
                 imageLoader
             )
         }

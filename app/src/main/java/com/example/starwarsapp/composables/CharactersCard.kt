@@ -18,6 +18,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import com.example.starwarsapp.CharactersListQuery
+import com.example.starwarsapp.na
+import com.example.starwarsapp.none
+import com.example.starwarsapp.unknown
 
 @ExperimentalComposeUiApi
 @Composable
@@ -27,7 +30,6 @@ fun CharactersCard(
     favorite: Boolean,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    configuration: Configuration,
     checkUncheckAsFavorite: (String) -> Unit
 ) {
     Column {
@@ -77,16 +79,20 @@ fun CharactersCard(
                             item.name?.let { name ->
                                 Text(text = name, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.primary)
                             }
-                            item.homeworld?.let { homeworld ->
-                                item.species?.let { specie ->
+                            item.homeworld?.name?.let { homeworld ->
+                                item.species?.name?.let { specie ->
                                     Text(
-                                        text = "${specie.name} from ${homeworld.name}",
-                                        style = MaterialTheme.typography.body2,
+                                        text = if (listOf(na, unknown, none).indexOf(specie) == -1) {
+                                            "$specie${if (listOf(na, unknown, none).indexOf(homeworld) == -1) " from $homeworld" else ""}"
+                                        } else {
+                                            if (listOf(na, unknown, none).indexOf(homeworld) == -1) "From $homeworld" else ""
+                                        },
+                                    style = MaterialTheme.typography.body2,
                                         color = MaterialTheme.colors.primary
                                     )
                                 } ?: run {
                                     Text(
-                                        text = "Human from ${homeworld.name}",
+                                        text = "Human${if (listOf(na, unknown, none).indexOf(homeworld) == -1) " from $homeworld" else ""}",
                                         style = MaterialTheme.typography.body2,
                                         color = MaterialTheme.colors.primary
                                     )

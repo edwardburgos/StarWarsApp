@@ -1,6 +1,5 @@
 package com.example.starwarsapp.composables
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.*
@@ -23,7 +22,6 @@ fun CharactersCards(
     favoriteCharactersIds: List<String>,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    configuration: Configuration,
     checkUncheckAsFavorite: (String) -> Unit,
     imageLoader: ImageLoader
 ) {
@@ -39,7 +37,6 @@ fun CharactersCards(
                     favoriteCharactersIds.indexOf(it.id) != -1,
                     keyboardController,
                     focusManager,
-                    configuration,
                     checkUncheckAsFavorite
                 )
             }

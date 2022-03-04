@@ -1,6 +1,5 @@
 package com.example.starwarsapp.home
 
-import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -43,7 +42,6 @@ fun Home(
     viewModel: HomeViewModel,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    configuration: Configuration,
     imageLoader: ImageLoader
 ) {
     val query = viewModel.query.value
@@ -134,7 +132,6 @@ fun Home(
                 favoriteCharacters.map { character -> character.id },
                 keyboardController,
                 focusManager,
-                configuration,
                 { id -> viewModel.checkUncheckAsFavorite(id) },
                 imageLoader
             )
