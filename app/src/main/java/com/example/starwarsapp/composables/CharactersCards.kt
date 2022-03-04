@@ -22,7 +22,7 @@ fun CharactersCards(
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
     configuration: Configuration,
-    insert: (CharactersListQuery.Person) -> Unit
+    checkUncheckAsFavorite: (String) -> Unit
 ) {
     LazyColumn (
         modifier = Modifier.fillMaxSize(),
@@ -38,7 +38,7 @@ fun CharactersCards(
                     keyboardController,
                     focusManager,
                     configuration,
-                    insert
+                    checkUncheckAsFavorite
                 )
             }
         }

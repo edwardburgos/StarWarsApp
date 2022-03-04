@@ -5,8 +5,8 @@ import com.example.data.database.CharactersDao
 import com.example.data.database.CharactersDatabase
 import com.example.data.database.model.CharacterEntity
 import com.example.data.database.model.CharacterMapper
+import com.example.domain.Character
 import com.example.domain.utils.DomainMapper
-import com.example.starwarsapp.CharactersListQuery
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,7 +31,7 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun providesCharacterEntityMapper(characterMapper: CharacterMapper): DomainMapper<CharacterEntity, CharactersListQuery.Person> {
+    fun providesCharacterEntityMapper(characterMapper: CharacterMapper): DomainMapper<CharacterEntity, Character> {
         return characterMapper
     }
 }

@@ -29,7 +29,7 @@ fun CharactersCard(
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
     configuration: Configuration,
-    insert: (CharactersListQuery.Person) -> Unit
+    checkUncheckAsFavorite: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -57,7 +57,7 @@ fun CharactersCard(
     ) {
         Row {
             Column {
-                IconButton(onClick = { insert(item) }) {
+                IconButton(onClick = { checkUncheckAsFavorite(item.id) }) {
                     Icon(
                         if (favorite) Icons.Filled.Star else Icons.Filled.StarBorder,
                         contentDescription = "Set as favorite",

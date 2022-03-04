@@ -10,9 +10,9 @@ import com.example.data.repository.CharactersPagingDataSource
 import com.example.data.network.model.ResponseStatus
 import com.example.data.repository.model.GetCharactersResponse
 import com.example.starwarsapp.CharactersListQuery
-import com.example.usecases.GetCharactersDatabaseUseCase
+import com.example.usecases.CheckUncheckAsFavoriteUseCase
 import com.example.usecases.GetCharactersUseCase
-import com.example.usecases.InsertCharacterUseCase
+import com.example.usecases.GetFavoriteCharactersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -23,8 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCharactersUseCase: GetCharactersUseCase,
-    private val getCharactersDatabaseUseCase: GetCharactersDatabaseUseCase,
-    private val insertCharacterUseCase: InsertCharacterUseCase,
+    private val getFavoriteCharactersUseCase: GetFavoriteCharactersUseCase,
+    private val checkUncheckAsFavoriteUseCase: CheckUncheckAsFavoriteUseCase,
     private val dataSource: CharactersPagingDataSource,
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class HomeViewModel @Inject constructor(
             pagingSourceFactory = { dataSource }
         ).flow.cachedIn(viewModelScope)
 
-    val getCharactersDatabase = getCharactersDatabaseUseCase.invoke()
+    val getFavoriteCharacters = getFavoriteCharactersUseCase.invoke()
 
     val getCharacters =
         MutableStateFlow(GetCharactersResponse(status = ResponseStatus.INITIAL, characters = null))
@@ -48,9 +48,9 @@ class HomeViewModel @Inject constructor(
 
     private val insertionResponse = MutableStateFlow(ResponseStatus.INITIAL)
 
-    fun newEmition(character: CharactersListQuery.Person) {
+    fun checkUncheckAsFavorite(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            insertCharacterUseCase.invoke(character).collect {
+            checkUncheckAsFavoriteUseCase.invoke(id).collect {
                 insertionResponse.value = it
             }
         }

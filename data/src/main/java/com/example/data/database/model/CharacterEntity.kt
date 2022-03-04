@@ -3,7 +3,6 @@ package com.example.data.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.starwarsapp.CharactersListQuery
 import java.util.*
 
 @Entity(tableName = "character_table")
@@ -15,11 +14,29 @@ data class CharacterEntity (
     var name: String?,
 
     @ColumnInfo
-    var species: CharactersListQuery.Species?,
+    var eyeColor: String?,
 
     @ColumnInfo
-    var homeworld: CharactersListQuery.Homeworld?,
+    var hairColor: String?,
 
     @ColumnInfo
-    var updatedAt: Date
+    var skinColor: String?,
+
+    @ColumnInfo
+    var birthYear: String?,
+
+    @ColumnInfo
+    var vehicles: List<String>?,
+
+    @ColumnInfo
+    var species: String?,
+
+    @ColumnInfo
+    var homeworld: String?,
+
+    @ColumnInfo
+    var favorite: Boolean,
+
+    @ColumnInfo
+    var markedAsFavoriteAt: Date?
 )

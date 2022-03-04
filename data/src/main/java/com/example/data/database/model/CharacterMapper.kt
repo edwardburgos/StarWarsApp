@@ -1,35 +1,47 @@
 package com.example.data.database.model
 
 import com.example.domain.utils.DomainMapper
-import com.example.starwarsapp.CharactersListQuery
-import java.util.*
+import com.example.domain.Character
 import javax.inject.Inject
 
-class CharacterMapper @Inject constructor(): DomainMapper<CharacterEntity, CharactersListQuery.Person> {
-    override fun mapToDomainModel(model: CharacterEntity): CharactersListQuery.Person {
-        return CharactersListQuery.Person(
+class CharacterMapper @Inject constructor(): DomainMapper<CharacterEntity, Character> {
+    override fun mapToDomainModel(model: CharacterEntity): Character {
+        return Character(
             model.id,
             model.name,
+            model.eyeColor,
+            model.hairColor,
+            model.skinColor,
+            model.birthYear,
+            model.vehicles,
             model.species,
-            model.homeworld
+            model.homeworld,
+            model.favorite,
+            model.markedAsFavoriteAt
         )
     }
 
-    override fun mapFromDomainModel(domainModel: CharactersListQuery.Person): CharacterEntity {
+    override fun mapFromDomainModel(domainModel: Character): CharacterEntity {
         return CharacterEntity(
             domainModel.id,
             domainModel.name,
+            domainModel.eyeColor,
+            domainModel.hairColor,
+            domainModel.skinColor,
+            domainModel.birthYear,
+            domainModel.vehicles,
             domainModel.species,
             domainModel.homeworld,
-            Date()
+            domainModel.favorite,
+            domainModel.markedAsFavoriteAt
         )
     }
 
-    fun fromEntityList(initial: List<CharacterEntity>): List<CharactersListQuery.Person>{
+    fun fromEntityList(initial: List<CharacterEntity>): List<Character>{
         return initial.map { mapToDomainModel(it) }
     }
 
-    fun toEntityList(initial: List<CharactersListQuery.Person>): List<CharacterEntity>{
+    fun toEntityList(initial: List<Character>): List<CharacterEntity>{
         return initial.map { mapFromDomainModel(it) }
     }
 }

@@ -5,28 +5,44 @@ import androidx.paging.PagingState
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.example.data.database.CharactersDao
-import com.example.data.database.model.CharacterMapper
 import com.example.starwarsapp.CharactersListQuery
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class CharactersPagingDataSource @Inject constructor(
     private val apolloClient: ApolloClient,
-    private val charactersDao: CharactersDao,
-    private val characterMapper: CharacterMapper
+    private val charactersDao: CharactersDao
 ) : PagingSource<String, CharactersListQuery.Person>() {
     override suspend fun load(params: LoadParams<String>): LoadResult<String, CharactersListQuery.Person> {
         val afterParam = params.key ?: ""
         return try {
             val response = apolloClient.query(CharactersListQuery(Optional.presentIfNotNull(5), Optional.presentIfNotNull(afterParam))).execute()
+
             CoroutineScope(Dispatchers.IO).launch {
+                var existingRows = charactersDao.getAllOnce().map { character -> character.id }
                 response.data?.allPeople?.people?.forEach {
-                    it?.let { character -> charactersDao.addFavorite(character = characterMapper.mapFromDomainModel(character)) }
+                    it?.let { character ->
+                        if (existingRows.indexOf(character.id) == -1) {
+                            charactersDao.insertCharacter(
+                                character.id,
+                                character.name,
+                                character.species?.name,
+                                character.homeworld?.name
+                            )
+                        } else {
+                            charactersDao.updateCharacter(
+                                character.id,
+                                character.name,
+                                character.species?.name,
+                                character.homeworld?.name
+                            )
+                        }
+                    }
                 }
             }
+
             val pagedResponse = response.data
             val data = pagedResponse?.allPeople
 
@@ -40,7 +56,6 @@ class CharactersPagingDataSource @Inject constructor(
                     people.filterNotNull()
                 } ?: run { listOf(CharactersListQuery.Person(id = "", name = null, species = null, homeworld = null)) }
             } ?: run { listOf(CharactersListQuery.Person(id = "", name = null, species = null, homeworld = null)) }
-
             LoadResult.Page(
                 data = finalData,
                 prevKey = null,

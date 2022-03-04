@@ -24,13 +24,13 @@ class UsecasesModule {
 
     @Singleton
     @Provides
-    fun providesInsertCharacterUseCaseImpl(insertCharacterUseCaseImpl: InsertCharacterUseCaseImpl): InsertCharacterUseCase {
-        return insertCharacterUseCaseImpl
+    fun providesCheckUncheckAsFavoriteUseCaseImpl(checkUncheckAsFavoriteUseCaseImpl: CheckUncheckAsFavoriteUseCaseImpl): CheckUncheckAsFavoriteUseCase {
+        return checkUncheckAsFavoriteUseCaseImpl
     }
 
     @Singleton
     @Provides
-    fun providesGetCharactersDatabaseUseCaseImpl(getCharactersDatabaseUseCase: GetCharactersDatabaseUseCaseImpl): GetCharactersDatabaseUseCase {
-        return getCharactersDatabaseUseCase
+    fun providesGetFavoriteCharactersUseCaseImpl(getFavoriteCharactersUseCaseImpl: GetFavoriteCharactersUseCaseImpl): GetFavoriteCharactersUseCase {
+        return getFavoriteCharactersUseCaseImpl
     }
 }

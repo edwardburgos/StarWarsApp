@@ -31,14 +31,20 @@ fun Home(
     val characters: LazyPagingItems<CharactersListQuery.Person> =
         viewModel.characters.collectAsLazyPagingItems()
 
-    val charactersDatabase by viewModel.getCharactersDatabase.collectAsState(
+    val favoriteCharacters by viewModel.getFavoriteCharacters.collectAsState(
         initial = listOf(
             CharacterEntity(
                 id = "",
                 name = null,
+                eyeColor = null,
+                hairColor = null,
+                skinColor = null,
+                birthYear = null,
+                vehicles = null,
                 species = null,
                 homeworld = null,
-                updatedAt = Date()
+                markedAsFavoriteAt = Date(),
+                favorite = false
             )
         )
     )
@@ -56,11 +62,11 @@ fun Home(
         CharactersCards(
             { id -> navController.navigate("detail/$id") },
             characters,
-            charactersDatabase.map { character -> character.id },
+            favoriteCharacters.map { character -> character.id },
             keyboardController,
             focusManager,
             configuration,
-            { character -> viewModel.newEmition(character) }
+            { id -> viewModel.checkUncheckAsFavorite(id) }
         )
     }
 }

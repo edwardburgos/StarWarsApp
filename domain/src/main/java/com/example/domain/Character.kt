@@ -1,4 +1,4 @@
-package com.example.domain.utils
+package com.example.domain
 
 import java.util.*
 
@@ -13,6 +13,5 @@ data class Character (
     var species: String?,
     var homeworld: String?,
     var favorite: Boolean,
-    var detailsIncluded: Boolean,
-    var updatedAt: Date
+    var markedAsFavoriteAt: Date?
 )

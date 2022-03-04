@@ -19,8 +19,7 @@ import javax.inject.Inject
 
 class CharactersRepositoryImpl @Inject constructor(
     private val apolloClient: ApolloClient,
-    private val charactersDao: CharactersDao,
-    private val characterMapper: CharacterMapper,
+    private val charactersDao: CharactersDao
 ) : CharactersRepository {
 
     override fun getCharacters(): Flow<GetCharactersResponse> {
@@ -82,14 +81,18 @@ class CharactersRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun saveCharacter(character: CharactersListQuery.Person): Flow<ResponseStatus> {
+    override fun checkUncheckAsFavorite(id: String): Flow<ResponseStatus> {
         return flow {
-            charactersDao.addFavorite(character = characterMapper.mapFromDomainModel(character))
+            if (charactersDao.getFavoritesOnce().map { character -> character.id }.indexOf(id) == -1) {
+                charactersDao.favoriteTrue(id)
+            } else {
+                charactersDao.favoriteFalse(id)
+            }
             emit(ResponseStatus.SUCCESSFUL)
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun getCharactersFromDatabase(): Flow<List<CharacterEntity>> {
+    override fun getFavoriteCharacters(): Flow<List<CharacterEntity>> {
         return charactersDao.getFavorites()
     }
 }
