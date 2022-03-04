@@ -1,6 +1,7 @@
 query Character( $characterId: ID!) {
     person (id: $characterId ) {
         id
+        name
         eyeColor
         hairColor
         skinColor

@@ -1,5 +1,10 @@
 package com.example.data.repository
 
+import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.apollographql.apollo3.ApolloClient
 import com.example.data.database.CharactersDao
 import com.example.data.database.model.CharacterEntity
@@ -103,5 +108,11 @@ class CharactersRepositoryImpl @Inject constructor(
 
     override fun getFavoriteCharacters(): Flow<List<CharacterEntity>> {
         return charactersDao.getFavorites()
+    }
+
+    override fun getPager(): Flow<PagingData<CharactersListQuery.Person>> {
+        return Pager(config = PagingConfig(pageSize = 5, prefetchDistance = 2),
+            pagingSourceFactory = { CharactersPagingDataSource(apolloClient, charactersDao)}
+        ).flow
     }
 }

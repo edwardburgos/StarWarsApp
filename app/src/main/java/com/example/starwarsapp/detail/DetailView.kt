@@ -1,8 +1,6 @@
 package com.example.starwarsapp.detail
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -14,35 +12,60 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.data.network.model.ResponseStatus
 import com.example.data.repository.model.GetCharacterResponse
+import com.example.domain.InformationSection
+import com.example.starwarsapp.composables.GeneralInformationItem
+import com.example.starwarsapp.na
+import com.example.starwarsapp.none
+import com.example.starwarsapp.unknown
+
+val nullableValues = listOf(na, unknown, none)
 
 @Composable
 fun Detail(
     navController: NavController,
-    itemId: String,
+    itemPlusName: String,
     viewModel: DetailViewModel
 ) {
-    viewModel.setCharacterId(itemId)
+    viewModel.setCharacterId(itemPlusName.split("+%").elementAt(0))
 
-    val response by viewModel.getCharacter.collectAsState(initial = GetCharacterResponse(ResponseStatus.INITIAL, null))
+    val response by viewModel.getCharacter.collectAsState(
+        initial = GetCharacterResponse(
+            ResponseStatus.INITIAL,
+            null
+        )
+    )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {},
+                title = {
+                    response.character?.name?.let {
+                        Text(
+                            text = it,
+                            color = Color.White,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 50.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.Filled.ArrowBack,
                             contentDescription = "Go Back",
-                            tint = MaterialTheme.colors.primary
+                            tint = Color.White
                         )
                     }
                 },
-                backgroundColor = Color.Transparent,
+                backgroundColor = Color.Black,
                 elevation = 0.dp
             )
         }
@@ -55,17 +78,74 @@ fun Detail(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                it.birthYear?.let { birthYear ->
-                    Text(birthYear)
-                }
+                Text(
+                    text = "General Information",
+                    style = MaterialTheme.typography.h6,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
                 it.eyeColor?.let { eyeColor ->
-                    Text(eyeColor)
+                    if (nullableValues.indexOf(eyeColor) == -1) {
+                        GeneralInformationItem(
+                            section = InformationSection.Eye_Color,
+                            value = eyeColor
+                        )
+                    }
                 }
+                Divider()
                 it.hairColor?.let { hairColor ->
-                    Text(hairColor)
+                    if (nullableValues.indexOf(hairColor) == -1) {
+                        GeneralInformationItem(
+                            section = InformationSection.Hair_Color,
+                            value = hairColor
+                        )
+                    }
                 }
+                Divider()
                 it.skinColor?.let { skinColor ->
-                    Text(skinColor)
+                    if (nullableValues.indexOf(skinColor) == -1) {
+                        GeneralInformationItem(
+                            section = InformationSection.Skin_Color,
+                            value = skinColor
+                        )
+                    }
+                }
+                Divider()
+                it.birthYear?.let { birthYear ->
+                    if (nullableValues.indexOf(birthYear) == -1) {
+                        GeneralInformationItem(
+                            section = InformationSection.Birth_Year,
+                            value = birthYear
+                        )
+                    }
+                }
+                Divider()
+                it.vehicleConnection?.vehicles?.let { vehicles ->
+                    if (vehicles.isNotEmpty()) {
+                        Text(
+                            text = "Vehicles",
+                            style = MaterialTheme.typography.h6,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 8.dp, top = 16.dp)
+                        )
+                        vehicles.forEach { vehicle ->
+                            vehicle?.name?.let { name ->
+                                Row (
+                                    modifier = Modifier
+                                        .padding(vertical = 8.dp)
+                                        .fillMaxWidth()
+                                ){
+                                    Text(
+                                        text = name,
+                                        style = MaterialTheme.typography.h6,
+                                        color = Color.Gray,
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                                Divider()
+                            }
+                        }
+                    }
                 }
             }
         }

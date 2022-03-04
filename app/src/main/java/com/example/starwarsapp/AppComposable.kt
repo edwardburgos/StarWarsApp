@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.ImageLoader
 import com.example.starwarsapp.detail.Detail
 import com.example.starwarsapp.detail.DetailViewModel
 import com.example.starwarsapp.home.Home
@@ -16,7 +17,7 @@ import com.example.starwarsapp.home.HomeViewModel
 
 @ExperimentalComposeUiApi
 @Composable
-fun AppComposable() {
+fun AppComposable(imageLoader: ImageLoader) {
     val navController = rememberNavController()
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
@@ -30,16 +31,17 @@ fun AppComposable() {
                 homeviewModel,
                 keyboardController,
                 focusManager,
-                configuration
+                configuration,
+                imageLoader
             )
         }
-        composable("detail/{characterId}") { backStackEntry ->
+        composable("detail/{id}") { backStackEntry ->
             backStackEntry.arguments?.let {
-                it.getString("characterId")?.let { characterId ->
+                it.getString("id")?.let { id ->
                     val detailviewModel = hiltViewModel<DetailViewModel>()
                     Detail(
                         navController,
-                        characterId,
+                        id,
                         detailviewModel
                     )
                 }

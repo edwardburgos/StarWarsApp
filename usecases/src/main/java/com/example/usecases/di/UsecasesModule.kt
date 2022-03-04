@@ -33,4 +33,10 @@ class UsecasesModule {
     fun providesGetFavoriteCharactersUseCaseImpl(getFavoriteCharactersUseCaseImpl: GetFavoriteCharactersUseCaseImpl): GetFavoriteCharactersUseCase {
         return getFavoriteCharactersUseCaseImpl
     }
+
+    @Singleton
+    @Provides
+    fun providesGetPagerUseCaseImpl(getPagerUseCaseImpl: GetPagerUseCaseImpl): GetPagerUseCase {
+        return getPagerUseCaseImpl
+    }
 }

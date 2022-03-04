@@ -19,9 +19,8 @@ class CharactersPagingDataSource @Inject constructor(
         val afterParam = params.key ?: ""
         return try {
             val response = apolloClient.query(CharactersListQuery(Optional.presentIfNotNull(5), Optional.presentIfNotNull(afterParam))).execute()
-
             CoroutineScope(Dispatchers.IO).launch {
-                var existingRows = charactersDao.getAllOnce().map { character -> character.id }
+                val existingRows = charactersDao.getAllOnce().map { character -> character.id }
                 response.data?.allPeople?.people?.forEach {
                     it?.let { character ->
                         if (existingRows.indexOf(character.id) == -1) {
@@ -48,14 +47,13 @@ class CharactersPagingDataSource @Inject constructor(
 
             var nextAfterParam: String? = null
             if (pagedResponse?.allPeople?.pageInfo?.hasNextPage == true) {
-                nextAfterParam = pagedResponse?.allPeople?.pageInfo?.endCursor
+                nextAfterParam = pagedResponse.allPeople.pageInfo.endCursor
             }
 
-            var finalData = data?.let {
-                it.people?.let { people ->
-                    people.filterNotNull()
-                } ?: run { listOf(CharactersListQuery.Person(id = "", name = null, species = null, homeworld = null)) }
+            val finalData = data?.let {
+                it.people?.filterNotNull() ?: run { listOf(CharactersListQuery.Person(id = "", name = null, species = null, homeworld = null)) }
             } ?: run { listOf(CharactersListQuery.Person(id = "", name = null, species = null, homeworld = null)) }
+
             LoadResult.Page(
                 data = finalData,
                 prevKey = null,
@@ -67,7 +65,7 @@ class CharactersPagingDataSource @Inject constructor(
         }
     }
 
-    override fun getRefreshKey(state: PagingState<String, CharactersListQuery.Person>): String? {
+    override fun getRefreshKey(state: PagingState<String, CharactersListQuery.Person>): String {
         return state.anchorPosition.toString()
     }
 }

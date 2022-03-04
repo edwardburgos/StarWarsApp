@@ -2,15 +2,15 @@ package com.example.starwarsapp.composables
 
 import android.content.res.Configuration
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
@@ -25,63 +25,88 @@ fun CharactersCard(
     navigate: (String) -> Unit,
     item: CharactersListQuery.Person,
     favorite: Boolean,
-    first: Boolean,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
     configuration: Configuration,
     checkUncheckAsFavorite: (String) -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .padding(
-                start = 16.dp,
-                top = if (first) 16.dp else 0.dp,
-                end = 16.dp,
-                bottom = 16.dp
-            )
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        keyboardController?.hide()
-                        focusManager.clearFocus()
-                    },
-                    onTap = {
-                        navigate(item.id)
-                        keyboardController?.hide()
-                        focusManager.clearFocus()
+    Column {
+        Card(
+            shape = RoundedCornerShape(0),
+            modifier = Modifier
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onPress = {
+                            keyboardController?.hide()
+                            focusManager.clearFocus()
+                        },
+                        onTap = {
+                            navigate(item.id)
+                            keyboardController?.hide()
+                            focusManager.clearFocus()
+                        }
+                    )
+                }
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.height(IntrinsicSize.Min),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Row {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .padding(horizontal = 8.dp, vertical = 16.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            IconButton(onClick = { checkUncheckAsFavorite(item.id) }) {
+                                Icon(
+                                    if (favorite) Icons.Filled.Star else Icons.Filled.StarBorder,
+                                    contentDescription = "Set as favorite",
+                                    tint = MaterialTheme.colors.primary
+                                )
+                            }
+                        }
+                        Column(
+                            modifier = Modifier.padding(vertical = 16.dp)
+                        ) {
+                            item.name?.let { name ->
+                                Text(text = name, style = MaterialTheme.typography.h6)
+                            }
+                            item.homeworld?.let { homeworld ->
+                                item.species?.let { specie ->
+                                    Text(
+                                        text = "${specie.name} from ${homeworld.name}",
+                                        style = MaterialTheme.typography.body2
+                                    )
+                                } ?: run {
+                                    Text(
+                                        text = "Human from ${homeworld.name}",
+                                        style = MaterialTheme.typography.body2
+                                    )
+                                }
+                            }
+                        }
                     }
-                )
-            }
-            .fillMaxWidth(if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 0.5f else 1f),
-        elevation = 4.dp
-    ) {
-        Row {
-            Column {
-                IconButton(onClick = { checkUncheckAsFavorite(item.id) }) {
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.End
+                ) {
                     Icon(
-                        if (favorite) Icons.Filled.Star else Icons.Filled.StarBorder,
-                        contentDescription = "Set as favorite",
+                        Icons.Filled.ChevronRight,
+                        contentDescription = "Go to details",
                         tint = MaterialTheme.colors.primary
                     )
                 }
             }
-            Column(
-                modifier = Modifier.padding(10.dp)
-            ) {
-                item.name?.let { name ->
-                    Text(text = name, style = MaterialTheme.typography.h6)
-                }
-                item.homeworld?.let { homeworld ->
-                    item.species?.let { specie ->
-                        Text(
-                            text = "$specie from $homeworld",
-                            style = MaterialTheme.typography.body2
-                        )
-                    } ?: run {
-                        Text(text = "Human from $homeworld", style = MaterialTheme.typography.body2)
-                    }
-                }
-            }
         }
+        Divider()
     }
 }
