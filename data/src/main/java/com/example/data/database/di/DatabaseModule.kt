@@ -3,10 +3,6 @@ package com.example.data.database.di
 import android.content.Context
 import com.example.data.database.CharactersDao
 import com.example.data.database.CharactersDatabase
-import com.example.data.database.model.CharacterEntity
-import com.example.data.database.model.CharacterMapper
-import com.example.domain.Character
-import com.example.domain.utils.DomainMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,11 +23,5 @@ class DatabaseModule {
     @Provides
     fun providesCharactersDao(charactersDatabase: CharactersDatabase): CharactersDao {
         return charactersDatabase.charactersDao
-    }
-
-    @Singleton
-    @Provides
-    fun providesCharacterEntityMapper(characterMapper: CharacterMapper): DomainMapper<CharacterEntity, Character> {
-        return characterMapper
     }
 }

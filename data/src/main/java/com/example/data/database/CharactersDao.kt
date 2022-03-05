@@ -9,33 +9,34 @@ interface CharactersDao {
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
-        SELECT id, name, species, homeworld, favorite FROM character_table
-    """)
-    fun getAll(): Flow<List<CharacterEntity>>
-
-    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
-    @Query("""
-        SELECT id, name, species, homeworld, favorite FROM character_table
+        SELECT id, cursor, name, species, homeworld, favorite FROM character_table
     """)
     fun getAllOnce(): List<CharacterEntity>
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
-        SELECT id, name, species, homeworld, favorite FROM character_table WHERE favorite = 1 ORDER BY markedAsFavoriteAt DESC
+        SELECT cursor FROM character_table
     """)
-    fun getFavorites(): Flow<List<CharacterEntity>>
+    fun getCursors(): List<String>
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
-        SELECT id, name, species, homeworld, favorite FROM character_table WHERE favorite = 1 ORDER BY markedAsFavoriteAt DESC
+        SELECT id FROM character_table WHERE favorite = 1
     """)
-    fun getFavoritesOnce(): List<CharacterEntity>
+    fun getFavoritesIds(): Flow<List<String>>
+
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
+    @Query("""
+        SELECT id FROM character_table WHERE favorite = 1
+    """)
+    fun getFavoritesIdsOnce(): List<String>
 
     @Query("""
-        INSERT INTO character_table (id, name, species, homeworld, favorite) VALUES (:id, :name, :species, :homeworld, 0)
+        INSERT INTO character_table (id, cursor, name, species, homeworld, favorite) VALUES (:id, :cursor, :name, :species, :homeworld, 0)
     """)
     fun insertCharacter(
         id: String,
+        cursor: String,
         name: String?,
         species: String?,
         homeworld: String?
@@ -65,9 +66,9 @@ interface CharactersDao {
         vehicles: List<String>?
     )
 
-    @Query("UPDATE character_table SET favorite = 1, markedAsFavoriteAt = :markedAsFavoriteAt WHERE id = :id")
-    fun favoriteTrue(id: String, markedAsFavoriteAt: Long)
+    @Query("UPDATE character_table SET favorite = 1 WHERE id = :id")
+    fun favoriteTrue(id: String)
 
-    @Query("UPDATE character_table SET favorite = 0, markedAsFavoriteAt = null WHERE id = :id")
+    @Query("UPDATE character_table SET favorite = 0 WHERE id = :id")
     fun favoriteFalse(id: String)
 }

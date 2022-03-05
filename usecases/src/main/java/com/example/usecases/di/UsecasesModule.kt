@@ -10,11 +10,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class UsecasesModule {
-    @Singleton
-    @Provides
-    fun providesGetCharactersUseCaseImpl(getCharactersUseCaseImpl: GetCharactersUseCaseImpl): GetCharactersUseCase {
-        return getCharactersUseCaseImpl
-    }
 
     @Singleton
     @Provides
@@ -30,8 +25,8 @@ class UsecasesModule {
 
     @Singleton
     @Provides
-    fun providesGetFavoriteCharactersUseCaseImpl(getFavoriteCharactersUseCaseImpl: GetFavoriteCharactersUseCaseImpl): GetFavoriteCharactersUseCase {
-        return getFavoriteCharactersUseCaseImpl
+    fun providesGetFavoriteCharactersIdsUseCaseImpl(getFavoriteCharactersIdsUseCaseImpl: GetFavoriteCharactersIdsUseCaseImpl): GetFavoriteCharactersIdsUseCase {
+        return getFavoriteCharactersIdsUseCaseImpl
     }
 
     @Singleton

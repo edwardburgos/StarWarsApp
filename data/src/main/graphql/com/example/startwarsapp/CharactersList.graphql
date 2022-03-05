@@ -1,13 +1,16 @@
 query CharactersList ( $first: Int, $after: String) {
     allPeople (first: $first, after: $after) {
-        people {
-            id
-            name
-            species {
+        edges {
+            cursor
+            node {
+                id
                 name
-            }
-            homeworld {
-                name
+                species {
+                    name
+                    }
+                homeworld {
+                    name
+                }
             }
         }
         pageInfo {

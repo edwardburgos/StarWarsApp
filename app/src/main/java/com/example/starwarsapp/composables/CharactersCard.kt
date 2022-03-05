@@ -1,6 +1,5 @@
 package com.example.starwarsapp.composables
 
-import android.content.res.Configuration
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +25,7 @@ import com.example.starwarsapp.unknown
 @Composable
 fun CharactersCard(
     navigate: (String) -> Unit,
-    item: CharactersListQuery.Person,
+    item: CharactersListQuery.Node,
     favorite: Boolean,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,

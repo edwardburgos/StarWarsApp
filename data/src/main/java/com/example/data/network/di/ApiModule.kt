@@ -3,6 +3,10 @@ package com.example.data.network.di
 import android.os.Looper
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
+import com.example.data.database.model.CharacterEntity
+import com.example.data.network.model.MapperForNetwork
+import com.example.domain.utils.DomainMapper
+import com.example.starwarsapp.CharactersListQuery
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +30,11 @@ class ApiModule {
             .serverUrl("https://swapi-graphql.netlify.app/.netlify/functions/index")
             .okHttpClient(okHttpClient)
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun providesMapperForNetwork(mapperForNetwork: MapperForNetwork): DomainMapper<CharacterEntity, CharactersListQuery.Node> {
+        return mapperForNetwork
     }
 }

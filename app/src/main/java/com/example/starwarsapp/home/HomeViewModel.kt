@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.data.network.model.ResponseStatus
-import com.example.data.repository.model.GetCharactersResponse
 import com.example.starwarsapp.CharactersListQuery
 import com.example.usecases.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,27 +17,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getCharactersUseCase: GetCharactersUseCase,
-    private val getFavoriteCharactersUseCase: GetFavoriteCharactersUseCase,
+    getFavoriteCharactersIdsUseCase: GetFavoriteCharactersIdsUseCase,
     private val checkUncheckAsFavoriteUseCase: CheckUncheckAsFavoriteUseCase,
     private val getPagerUseCase: GetPagerUseCase
 ) : ViewModel() {
 
     var query = mutableStateOf("")
+    var previousNetworkState = mutableStateOf(true)
 
-    var characters: Flow<PagingData<CharactersListQuery.Person>> = getPagerUseCase.invoke("").cachedIn(viewModelScope)
-    val getFavoriteCharacters = getFavoriteCharactersUseCase.invoke()
+    var characters: Flow<PagingData<CharactersListQuery.Node>> = getPagerUseCase.invoke("").cachedIn(viewModelScope)
 
-    val getCharacters =
-        MutableStateFlow(GetCharactersResponse(status = ResponseStatus.INITIAL, characters = null))
-
-    fun updateGetCharacters() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getCharactersUseCase.invoke().collect {
-                getCharacters.value = it
-            }
-        }
-    }
+    val getFavoriteCharactersIds = getFavoriteCharactersIdsUseCase.invoke()
 
     private val insertionResponse = MutableStateFlow(ResponseStatus.INITIAL)
 
@@ -53,5 +42,9 @@ class HomeViewModel @Inject constructor(
     fun setQuery(newValue: String) {
         query.value = newValue.replace("\n", "")
         characters = getPagerUseCase.invoke(newValue).cachedIn(viewModelScope)
+    }
+
+    fun setPreviousNetworkState(newValue: Boolean) {
+        previousNetworkState.value = newValue
     }
 }

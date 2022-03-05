@@ -3,12 +3,14 @@ package com.example.data.database.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
 
 @Entity(tableName = "character_table")
 data class CharacterEntity (
     @PrimaryKey
     var id: String,
+
+    @ColumnInfo
+    var cursor: String,
 
     @ColumnInfo
     var name: String?,
@@ -35,8 +37,5 @@ data class CharacterEntity (
     var homeworld: String?,
 
     @ColumnInfo
-    var favorite: Boolean,
-
-    @ColumnInfo
-    var markedAsFavoriteAt: Long?
+    var favorite: Boolean
 )

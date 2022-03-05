@@ -28,9 +28,6 @@ import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
-import com.example.data.database.model.CharacterEntity
-import com.example.data.network.model.ResponseStatus
-import com.example.data.repository.model.GetCharactersResponse
 import com.example.starwarsapp.CharactersListQuery
 import com.example.starwarsapp.composables.CharactersCards
 import com.example.starwarsapp.composables.CustomTextField
@@ -42,39 +39,21 @@ fun Home(
     viewModel: HomeViewModel,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
-    imageLoader: ImageLoader
+    imageLoader: ImageLoader,
+    isNetworkAvailable: Boolean
 ) {
     val query = viewModel.query.value
+    val previousNetworkState = viewModel.previousNetworkState.value
 
-    val characters: LazyPagingItems<CharactersListQuery.Person> =
+    val characters: LazyPagingItems<CharactersListQuery.Node> =
         viewModel.characters.collectAsLazyPagingItems()
 
-    val favoriteCharacters by viewModel.getFavoriteCharacters.collectAsState(
-        initial = listOf(
-            CharacterEntity(
-                id = "",
-                name = null,
-                eyeColor = null,
-                hairColor = null,
-                skinColor = null,
-                birthYear = null,
-                vehicles = null,
-                species = null,
-                homeworld = null,
-                markedAsFavoriteAt = null,
-                favorite = false
-            )
-        )
-    )
+    val favoriteCharactersIds by viewModel.getFavoriteCharactersIds.collectAsState(initial = listOf())
 
-    val response by viewModel.getCharacters.collectAsState(
-        initial = GetCharactersResponse(
-            ResponseStatus.INITIAL,
-            null
-        )
-    )
-
-    if (response.status == ResponseStatus.INITIAL) viewModel.updateGetCharacters()
+    if (previousNetworkState != isNetworkAvailable) {
+        if (isNetworkAvailable) characters.retry()
+        viewModel.setPreviousNetworkState(isNetworkAvailable)
+    }
 
     Column {
         Surface(
@@ -129,7 +108,7 @@ fun Home(
             CharactersCards(
                 { id -> navController.navigate("detail/$id") },
                 characters,
-                favoriteCharacters.map { character -> character.id },
+                favoriteCharactersIds,
                 keyboardController,
                 focusManager,
                 { id -> viewModel.checkUncheckAsFavorite(id) },

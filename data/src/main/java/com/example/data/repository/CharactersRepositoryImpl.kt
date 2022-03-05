@@ -3,12 +3,15 @@ package com.example.data.repository
 import androidx.paging.*
 import com.apollographql.apollo3.ApolloClient
 import com.example.data.database.CharactersDao
+import com.example.data.database.CharactersDatabase
 import com.example.data.database.model.CharacterEntity
+import com.example.data.network.model.MapperForNetwork
 import com.example.data.network.model.ResponseStatus
+import com.example.data.pager.CharactersPagingDataSource
 import com.example.data.repository.model.GetCharacterResponse
-import com.example.data.repository.model.GetCharactersResponse
 import com.example.data.repository.utils.refreshIntervalMsLong
 import com.example.data.repository.utils.refreshIntervalMsShort
+import com.example.domain.utils.DomainMapper
 import com.example.starwarsapp.CharacterQuery
 import com.example.starwarsapp.CharactersListQuery
 import kotlinx.coroutines.Dispatchers
@@ -19,40 +22,10 @@ import javax.inject.Inject
 
 class CharactersRepositoryImpl @Inject constructor(
     private val apolloClient: ApolloClient,
-    private val charactersDao: CharactersDao
+    private val charactersDao: CharactersDao,
+    private val mapperForNetwork: DomainMapper<CharacterEntity, CharactersListQuery.Node>,
+    private val database: CharactersDatabase
 ) : CharactersRepository {
-
-    override fun getCharacters(): Flow<GetCharactersResponse> {
-        return flow {
-            var finalResponse = GetCharactersResponse(ResponseStatus.INITIAL, null)
-            val errorResponse = GetCharactersResponse(ResponseStatus.ERROR, null)
-            while (true) {
-                try {
-                    val result = apolloClient.query(CharactersListQuery()).execute()
-                    if (result.data != null) {
-                        result.dataAssertNoErrors.allPeople?.let {
-                            it.people?.let { people ->
-                                finalResponse = GetCharactersResponse(
-                                    if (people.isNotEmpty()) ResponseStatus.FILLED else ResponseStatus.EMPTY,
-                                    people
-                                )
-                            }
-                        }
-                    } else {
-                        finalResponse = errorResponse
-                    }
-                } catch (e: Exception) {
-                    finalResponse = errorResponse
-                }
-                emit(finalResponse)
-                if (finalResponse.status == ResponseStatus.INITIAL) {
-                    kotlinx.coroutines.delay(refreshIntervalMsShort)
-                } else {
-                    kotlinx.coroutines.delay(refreshIntervalMsLong)
-                }
-            }
-        }.flowOn(Dispatchers.IO)
-    }
 
     override fun getCharacter(id: String): Flow<GetCharacterResponse> {
         return flow {
@@ -91,9 +64,8 @@ class CharactersRepositoryImpl @Inject constructor(
 
     override fun checkUncheckAsFavorite(id: String): Flow<ResponseStatus> {
         return flow {
-            if (charactersDao.getFavoritesOnce().map { character -> character.id }
-                    .indexOf(id) == -1) {
-                charactersDao.favoriteTrue(id, System.currentTimeMillis())
+            if (charactersDao.getFavoritesIdsOnce().indexOf(id) == -1) {
+                charactersDao.favoriteTrue(id)
             } else {
                 charactersDao.favoriteFalse(id)
             }
@@ -101,13 +73,13 @@ class CharactersRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun getFavoriteCharacters(): Flow<List<CharacterEntity>> {
-        return charactersDao.getFavorites()
+    override fun getFavoriteCharactersIds(): Flow<List<String>> {
+        return charactersDao.getFavoritesIds()
     }
 
-    override fun getPager(query: String): Flow<PagingData<CharactersListQuery.Person>> {
+    override fun getPager(query: String): Flow<PagingData<CharactersListQuery.Node>> {
         return Pager(config = PagingConfig(pageSize = 5, prefetchDistance = 2),
-            pagingSourceFactory = { CharactersPagingDataSource(apolloClient, charactersDao, query)}
+            pagingSourceFactory = { CharactersPagingDataSource(apolloClient, charactersDao, mapperForNetwork, database, query) }
         ).flow
     }
 }

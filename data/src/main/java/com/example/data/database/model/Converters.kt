@@ -2,7 +2,6 @@ package com.example.data.database.model
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
-import java.util.*
 
 @ProvidedTypeConverter
 class Converters {

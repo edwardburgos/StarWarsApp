@@ -18,7 +18,7 @@ import com.example.starwarsapp.CharactersListQuery
 @Composable
 fun CharactersCards(
     navigate: (String) -> Unit,
-    items: LazyPagingItems<CharactersListQuery.Person>,
+    items: LazyPagingItems<CharactersListQuery.Node>,
     favoriteCharactersIds: List<String>,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
@@ -43,13 +43,10 @@ fun CharactersCards(
         }
         items.apply {
             when {
-                loadState.refresh is LoadState.Loading -> {
+                loadState.refresh is LoadState.Loading || loadState.append is LoadState.Loading -> {
                     item(1) { LoadingItem(imageLoader) }
                 }
-                loadState.append is LoadState.Loading -> {
-                    item(1) { LoadingItem(imageLoader) }
-                }
-                loadState.append is LoadState.Error -> {
+                loadState.refresh is LoadState.Error || loadState.append is LoadState.Error -> {
                     item(1) { ErrorItem() }
                 }
             }
