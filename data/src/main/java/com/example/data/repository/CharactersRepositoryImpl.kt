@@ -5,7 +5,6 @@ import com.apollographql.apollo3.ApolloClient
 import com.example.data.database.CharactersDao
 import com.example.data.database.CharactersDatabase
 import com.example.data.database.model.CharacterEntity
-import com.example.data.network.model.MapperForNetwork
 import com.example.data.network.model.ResponseStatus
 import com.example.data.pager.CharactersPagingDataSource
 import com.example.data.repository.model.GetCharacterResponse
@@ -62,15 +61,12 @@ class CharactersRepositoryImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    override fun checkUncheckAsFavorite(id: String): Flow<ResponseStatus> {
-        return flow {
-            if (charactersDao.getFavoritesIdsOnce().indexOf(id) == -1) {
-                charactersDao.favoriteTrue(id)
-            } else {
-                charactersDao.favoriteFalse(id)
-            }
-            emit(ResponseStatus.SUCCESSFUL)
-        }.flowOn(Dispatchers.IO)
+    override fun checkUncheckAsFavorite(id: String) {
+        if (charactersDao.getFavoritesIdsOnce().indexOf(id) == -1) {
+            charactersDao.favoriteTrue(id)
+        } else {
+            charactersDao.favoriteFalse(id)
+        }
     }
 
     override fun getFavoriteCharactersIds(): Flow<List<String>> {
@@ -79,7 +75,15 @@ class CharactersRepositoryImpl @Inject constructor(
 
     override fun getPager(query: String): Flow<PagingData<CharactersListQuery.Node>> {
         return Pager(config = PagingConfig(pageSize = 5, prefetchDistance = 2),
-            pagingSourceFactory = { CharactersPagingDataSource(apolloClient, charactersDao, mapperForNetwork, database, query) }
+            pagingSourceFactory = {
+                CharactersPagingDataSource(
+                    apolloClient,
+                    charactersDao,
+                    mapperForNetwork,
+                    database,
+                    query
+                )
+            }
         ).flow
     }
 }

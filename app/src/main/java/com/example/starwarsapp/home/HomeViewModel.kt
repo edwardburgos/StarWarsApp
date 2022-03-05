@@ -10,6 +10,7 @@ import com.example.starwarsapp.CharactersListQuery
 import com.example.usecases.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -29,13 +30,9 @@ class HomeViewModel @Inject constructor(
 
     val getFavoriteCharactersIds = getFavoriteCharactersIdsUseCase.invoke()
 
-    private val insertionResponse = MutableStateFlow(ResponseStatus.INITIAL)
-
     fun checkUncheckAsFavorite(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            checkUncheckAsFavoriteUseCase.invoke(id).collect {
-                insertionResponse.value = it
-            }
+            checkUncheckAsFavoriteUseCase.invoke(id)
         }
     }
 
