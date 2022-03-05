@@ -16,13 +16,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class CharactersPagingDataSource @Inject constructor(
+class CharactersPagingDataSource (
     private val apolloClient: ApolloClient,
-    private val charactersDao: CharactersDao,
     private val mapperForNetwork: DomainMapper<CharacterEntity, CharactersListQuery.Node>,
     private val database: CharactersDatabase,
     private val query: String
 ) : PagingSource<String, CharactersListQuery.Node>() {
+    private val charactersDao = database.charactersDao
+
     override suspend fun load(params: LoadParams<String>): LoadResult<String, CharactersListQuery.Node> {
         val afterParam = params.key ?: ""
         return try {

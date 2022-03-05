@@ -78,7 +78,6 @@ class CharactersRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 CharactersPagingDataSource(
                     apolloClient,
-                    charactersDao,
                     mapperForNetwork,
                     database,
                     query
