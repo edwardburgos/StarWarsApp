@@ -13,5 +13,5 @@ interface CharactersRepository {
     fun getCharacter(id: String): Flow<GetCharacterResponse>
     fun checkUncheckAsFavorite(id: String): Flow<ResponseStatus>
     fun getFavoriteCharacters(): Flow<List<CharacterEntity>>
-    fun getPager(): Flow<PagingData<CharactersListQuery.Person>>
+    fun getPager(query: String): Flow<PagingData<CharactersListQuery.Person>>
 }

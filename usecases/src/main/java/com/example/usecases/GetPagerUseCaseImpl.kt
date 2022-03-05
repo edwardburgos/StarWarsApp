@@ -8,5 +8,5 @@ import javax.inject.Inject
 
 class GetPagerUseCaseImpl @Inject constructor(private val charactersRepository: CharactersRepositoryImpl) :
     GetPagerUseCase {
-    override fun invoke(): Flow<PagingData<CharactersListQuery.Person>> = charactersRepository.getPager()
+    override fun invoke(query: String): Flow<PagingData<CharactersListQuery.Person>> = charactersRepository.getPager(query)
 }

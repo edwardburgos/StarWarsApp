@@ -13,12 +13,13 @@ import javax.inject.Inject
 
 class CharactersPagingDataSource @Inject constructor(
     private val apolloClient: ApolloClient,
-    private val charactersDao: CharactersDao
+    private val charactersDao: CharactersDao,
+    private val query: String
 ) : PagingSource<String, CharactersListQuery.Person>() {
     override suspend fun load(params: LoadParams<String>): LoadResult<String, CharactersListQuery.Person> {
         val afterParam = params.key ?: ""
         return try {
-            val response = apolloClient.query(CharactersListQuery(Optional.presentIfNotNull(5), Optional.presentIfNotNull(afterParam))).execute()
+            var response = apolloClient.query(CharactersListQuery(Optional.presentIfNotNull(5), Optional.presentIfNotNull(afterParam))).execute()
             CoroutineScope(Dispatchers.IO).launch {
                 val existingRows = charactersDao.getAllOnce().map { character -> character.id }
                 response.data?.allPeople?.people?.forEach {
@@ -55,7 +56,7 @@ class CharactersPagingDataSource @Inject constructor(
             } ?: run { listOf(CharactersListQuery.Person(id = "", name = null, species = null, homeworld = null)) }
 
             LoadResult.Page(
-                data = finalData,
+                data = if (query != "") finalData.filter { it?.name?.lowercase()?.contains(query) == true } else finalData,
                 prevKey = null,
                 nextKey = nextAfterParam
             )
