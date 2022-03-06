@@ -121,7 +121,7 @@ fun Home(
                         imageLoader = imageLoader
                     ),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxWidth(0.15f)
+                    modifier = Modifier.fillMaxWidth(0.10f)
                 )
             }
         } else {
