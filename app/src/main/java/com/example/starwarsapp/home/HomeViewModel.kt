@@ -10,7 +10,6 @@ import com.example.usecases.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +23,7 @@ class HomeViewModel @Inject constructor(
     var query = mutableStateOf("")
     var previousNetworkState = mutableStateOf(true)
 
-    var characters: Flow<PagingData<CharacterEntity>> = getPagerUseCase.invoke("").cachedIn(viewModelScope).distinctUntilChanged()
+    var characters: Flow<PagingData<CharacterEntity>> = getPagerUseCase.invoke("").cachedIn(viewModelScope)
 
     val getFavoriteCharactersIds = getFavoriteCharactersIdsUseCase.invoke()
 
