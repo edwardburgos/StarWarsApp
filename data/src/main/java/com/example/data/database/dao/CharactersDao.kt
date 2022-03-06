@@ -73,6 +73,6 @@ interface CharactersDao {
     @Query("UPDATE character_table SET favorite = 0 WHERE id = :id")
     fun favoriteFalse(id: String)
 
-    @Query("SELECT id, cursor, name, species, homeworld, favorite FROM character_table")
-    fun getAllCharactersPaging(): PagingSource<Int, CharacterEntity>
+    @Query("SELECT id, cursor, name, species, homeworld, favorite FROM character_table WHERE name LIKE '%' || :query || '%'")
+    fun getAllCharactersPaging(query: String): PagingSource<Int, CharacterEntity>
 }

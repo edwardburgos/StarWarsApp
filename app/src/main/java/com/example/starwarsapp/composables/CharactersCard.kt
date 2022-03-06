@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -87,13 +88,13 @@ fun CharactersCard(
                                             if (listOf(na, unknown, none).indexOf(homeworld) == -1) "From $homeworld" else ""
                                         },
                                     style = MaterialTheme.typography.body2,
-                                        color = MaterialTheme.colors.primary
+                                        color = Color.Gray
                                     )
                                 } ?: run {
                                     Text(
                                         text = "Human${if (listOf(na, unknown, none).indexOf(homeworld) == -1) " from $homeworld" else ""}",
                                         style = MaterialTheme.typography.body2,
-                                        color = MaterialTheme.colors.primary
+                                        color = Color.Gray
                                     )
                                 }
                             }

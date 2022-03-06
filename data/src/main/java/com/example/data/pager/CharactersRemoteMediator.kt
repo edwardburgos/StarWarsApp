@@ -11,15 +11,12 @@ import com.example.data.database.CharactersDatabase
 import com.example.data.database.model.CharacterEntity
 import com.example.data.database.model.RemoteKeysEntity
 import com.example.data.repository.utils.DEFAULT_PAGE_INDEX
-import com.example.domain.utils.DomainMapper
 import com.example.starwarsapp.CharactersListQuery
 
 @ExperimentalPagingApi
 class CharactersRemoteMediator(
     private val apolloClient: ApolloClient,
-    private val mapperForNetwork: DomainMapper<CharacterEntity, CharactersListQuery.Node>,
-    private val database: CharactersDatabase,
-    private val query: String
+    private val database: CharactersDatabase
 ) : RemoteMediator<Int, CharacterEntity>() {
 
     private val charactersDao = database.charactersDao

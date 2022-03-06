@@ -79,7 +79,7 @@ class CharactersRepositoryImpl @Inject constructor(
     override fun getPager(query: String): Flow<PagingData<CharacterEntity>> {
         return Pager(config = PagingConfig(pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
-                charactersDao.getAllCharactersPaging()
+                charactersDao.getAllCharactersPaging(query)
             },
             remoteMediator = CharactersRemoteMediator(apolloClient, mapperForNetwork, database, query)
         ).flow
