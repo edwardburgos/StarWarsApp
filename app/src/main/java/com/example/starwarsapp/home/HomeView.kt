@@ -52,10 +52,10 @@ fun Home(
 
     val favoriteCharactersIds by viewModel.getFavoriteCharactersIds.collectAsState(initial = listOf())
 
-//    if (previousNetworkState != isNetworkAvailable) {
-//        if (isNetworkAvailable) characters.retry()
-//        viewModel.setPreviousNetworkState(isNetworkAvailable)
-//    }
+    if (previousNetworkState != isNetworkAvailable) {
+        if (isNetworkAvailable) characters.retry()
+        viewModel.setPreviousNetworkState(isNetworkAvailable)
+    }
 
     Column {
         Surface(
