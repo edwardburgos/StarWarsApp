@@ -16,7 +16,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import com.example.starwarsapp.CharactersListQuery
+import com.example.data.database.model.CharacterEntity
 import com.example.starwarsapp.na
 import com.example.starwarsapp.none
 import com.example.starwarsapp.unknown
@@ -25,7 +25,7 @@ import com.example.starwarsapp.unknown
 @Composable
 fun CharactersCard(
     navigate: (String) -> Unit,
-    item: CharactersListQuery.Node,
+    item: CharacterEntity,
     favorite: Boolean,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,
@@ -78,8 +78,8 @@ fun CharactersCard(
                             item.name?.let { name ->
                                 Text(text = name, style = MaterialTheme.typography.h6, color = MaterialTheme.colors.primary)
                             }
-                            item.homeworld?.name?.let { homeworld ->
-                                item.species?.name?.let { specie ->
+                            item.homeworld?.let { homeworld ->
+                                item.species?.let { specie ->
                                     Text(
                                         text = if (listOf(na, unknown, none).indexOf(specie) == -1) {
                                             "$specie${if (listOf(na, unknown, none).indexOf(homeworld) == -1) " from $homeworld" else ""}"

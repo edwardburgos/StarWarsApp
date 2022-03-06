@@ -5,16 +5,10 @@ import androidx.paging.PagingState
 import androidx.room.withTransaction
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
-import com.example.data.database.CharactersDao
 import com.example.data.database.CharactersDatabase
 import com.example.data.database.model.CharacterEntity
-import com.example.data.network.model.MapperForNetwork
 import com.example.domain.utils.DomainMapper
 import com.example.starwarsapp.CharactersListQuery
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 class CharactersPagingDataSource (
     private val apolloClient: ApolloClient,
@@ -32,10 +26,10 @@ class CharactersPagingDataSource (
                     Optional.presentIfNotNull(5),
                     Optional.presentIfNotNull(afterParam)
                 )
-            ).execute()
-            CoroutineScope(Dispatchers.IO).launch {
+            ).execute().data?.allPeople
+            database.withTransaction {
                 val existingCursors = charactersDao.getCursors()
-                response.data?.allPeople?.edges?.forEach {
+                response?.edges?.forEach {
                     it?.let {
                         val cursor = it.cursor
                         it.node?.let { character ->
@@ -60,12 +54,11 @@ class CharactersPagingDataSource (
                 }
             }
 
-            val pagedResponse = response.data
-            val data = pagedResponse?.allPeople?.edges
+            val data = response?.edges
 
             var nextAfterParam: String? = null
-            if (pagedResponse?.allPeople?.pageInfo?.hasNextPage == true) {
-                nextAfterParam = pagedResponse.allPeople.pageInfo.endCursor
+            if (response?.pageInfo?.hasNextPage == true) {
+                nextAfterParam = response.pageInfo.endCursor
             }
 
             val finalData = data?.mapNotNull { it?.node } ?: run {

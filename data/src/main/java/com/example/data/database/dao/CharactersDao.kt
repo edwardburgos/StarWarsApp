@@ -1,5 +1,6 @@
-package com.example.data.database
+package com.example.data.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.example.data.database.model.CharacterEntity
 import kotlinx.coroutines.flow.Flow
@@ -71,4 +72,7 @@ interface CharactersDao {
 
     @Query("UPDATE character_table SET favorite = 0 WHERE id = :id")
     fun favoriteFalse(id: String)
+
+    @Query("SELECT id, cursor, name, species, homeworld, favorite FROM character_table")
+    fun getAllCharactersPaging(): PagingSource<Int, CharacterEntity>
 }

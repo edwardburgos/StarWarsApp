@@ -1,13 +1,11 @@
 package com.example.starwarsapp.home
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -25,10 +23,14 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.paging.LoadState.Loading
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.ImageLoader
-import com.example.starwarsapp.CharactersListQuery
+import coil.compose.rememberImagePainter
+import coil.size.OriginalSize
+import com.example.data.database.model.CharacterEntity
+import com.example.starwarsapp.R
 import com.example.starwarsapp.composables.CharactersCards
 import com.example.starwarsapp.composables.CustomTextField
 
@@ -45,15 +47,15 @@ fun Home(
     val query = viewModel.query.value
     val previousNetworkState = viewModel.previousNetworkState.value
 
-    val characters: LazyPagingItems<CharactersListQuery.Node> =
+    val characters: LazyPagingItems<CharacterEntity> =
         viewModel.characters.collectAsLazyPagingItems()
 
     val favoriteCharactersIds by viewModel.getFavoriteCharactersIds.collectAsState(initial = listOf())
 
-    if (previousNetworkState != isNetworkAvailable) {
-        if (isNetworkAvailable) characters.retry()
-        viewModel.setPreviousNetworkState(isNetworkAvailable)
-    }
+//    if (previousNetworkState != isNetworkAvailable) {
+//        if (isNetworkAvailable) characters.retry()
+//        viewModel.setPreviousNetworkState(isNetworkAvailable)
+//    }
 
     Column {
         Surface(
@@ -104,16 +106,36 @@ fun Home(
                 )
             }
         }
-        Column {
-            CharactersCards(
-                { id -> navController.navigate("detail/$id") },
-                characters,
-                favoriteCharactersIds,
-                keyboardController,
-                focusManager,
-                { id -> viewModel.checkUncheckAsFavorite(id) },
-                imageLoader
-            )
+        if (characters.itemCount == 0 && characters.loadState.refresh is Loading) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painter = rememberImagePainter(
+                        data = R.drawable.loader,
+                        builder = {
+                            size(OriginalSize)
+                        },
+                        imageLoader = imageLoader
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth(0.15f)
+                )
+            }
+        } else {
+            Column {
+                CharactersCards(
+                    { id -> navController.navigate("detail/$id") },
+                    characters,
+                    favoriteCharactersIds,
+                    keyboardController,
+                    focusManager,
+                    { id -> viewModel.checkUncheckAsFavorite(id) },
+                    imageLoader
+                )
+            }
         }
     }
 }

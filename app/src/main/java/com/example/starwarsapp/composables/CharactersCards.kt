@@ -12,13 +12,13 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.items
 import coil.ImageLoader
-import com.example.starwarsapp.CharactersListQuery
+import com.example.data.database.model.CharacterEntity
 
 @ExperimentalComposeUiApi
 @Composable
 fun CharactersCards(
     navigate: (String) -> Unit,
-    items: LazyPagingItems<CharactersListQuery.Node>,
+    items: LazyPagingItems<CharacterEntity>,
     favoriteCharactersIds: List<String>,
     keyboardController: SoftwareKeyboardController?,
     focusManager: FocusManager,

@@ -5,14 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.data.network.model.ResponseStatus
-import com.example.starwarsapp.CharactersListQuery
+import com.example.data.database.model.CharacterEntity
 import com.example.usecases.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +24,7 @@ class HomeViewModel @Inject constructor(
     var query = mutableStateOf("")
     var previousNetworkState = mutableStateOf(true)
 
-    var characters: Flow<PagingData<CharactersListQuery.Node>> = getPagerUseCase.invoke("").cachedIn(viewModelScope)
+    var characters: Flow<PagingData<CharacterEntity>> = getPagerUseCase.invoke("").cachedIn(viewModelScope).distinctUntilChanged()
 
     val getFavoriteCharactersIds = getFavoriteCharactersIdsUseCase.invoke()
 

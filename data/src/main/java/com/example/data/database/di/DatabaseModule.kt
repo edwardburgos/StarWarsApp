@@ -1,7 +1,7 @@
 package com.example.data.database.di
 
 import android.content.Context
-import com.example.data.database.CharactersDao
+import com.example.data.database.dao.CharactersDao
 import com.example.data.database.CharactersDatabase
 import dagger.Module
 import dagger.Provides

@@ -2,12 +2,14 @@ package com.example.data.repository
 
 import androidx.paging.*
 import com.apollographql.apollo3.ApolloClient
-import com.example.data.database.CharactersDao
+import com.example.data.database.dao.CharactersDao
 import com.example.data.database.CharactersDatabase
 import com.example.data.database.model.CharacterEntity
 import com.example.data.network.model.ResponseStatus
 import com.example.data.pager.CharactersPagingDataSource
+import com.example.data.pager.CharactersRemoteMediator
 import com.example.data.repository.model.GetCharacterResponse
+import com.example.data.repository.utils.DEFAULT_PAGE_SIZE
 import com.example.data.repository.utils.refreshIntervalMsLong
 import com.example.data.repository.utils.refreshIntervalMsShort
 import com.example.domain.utils.DomainMapper
@@ -73,16 +75,13 @@ class CharactersRepositoryImpl @Inject constructor(
         return charactersDao.getFavoritesIds()
     }
 
-    override fun getPager(query: String): Flow<PagingData<CharactersListQuery.Node>> {
-        return Pager(config = PagingConfig(pageSize = 5, prefetchDistance = 2),
+    @ExperimentalPagingApi
+    override fun getPager(query: String): Flow<PagingData<CharacterEntity>> {
+        return Pager(config = PagingConfig(pageSize = DEFAULT_PAGE_SIZE),
             pagingSourceFactory = {
-                CharactersPagingDataSource(
-                    apolloClient,
-                    mapperForNetwork,
-                    database,
-                    query
-                )
-            }
+                charactersDao.getAllCharactersPaging()
+            },
+            remoteMediator = CharactersRemoteMediator(apolloClient, mapperForNetwork, database, query)
         ).flow
     }
 }
