@@ -81,7 +81,7 @@ class CharactersRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 charactersDao.getAllCharactersPaging(query)
             },
-            remoteMediator = CharactersRemoteMediator(apolloClient, mapperForNetwork, database, query)
+            remoteMediator = CharactersRemoteMediator(apolloClient, database)
         ).flow
     }
 }
