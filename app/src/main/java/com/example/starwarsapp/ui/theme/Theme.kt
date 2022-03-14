@@ -27,6 +27,7 @@ private val LightColorPalette = lightColors(
     onBackground = Color.Black,
     onSurface = Color.Black,
     */
+// TODO: please remove un used code
 )
 
 @Composable

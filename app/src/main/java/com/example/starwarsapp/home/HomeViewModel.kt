@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
     private val getPagerUseCase: GetPagerUseCase
 ) : ViewModel() {
 
-    var query = mutableStateOf("")
+    var query = mutableStateOf("") // TODO: mutble states shud be privates
     var previousNetworkState = mutableStateOf(true)
 
     var characters: Flow<PagingData<CharacterEntity>> = getPagerUseCase.invoke("").cachedIn(viewModelScope)
@@ -34,7 +34,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun setQuery(newValue: String) {
-        query.value = newValue.replace("\n", "")
+        query.value = newValue.replace("\n", "") // TODO old values hsould string
         characters = getPagerUseCase.invoke(newValue).cachedIn(viewModelScope)
     }
 
