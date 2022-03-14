@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CharactersDao {
+    //TODO: QUERIES Strin gissues
 
     @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH)
     @Query("""
@@ -34,7 +35,7 @@ interface CharactersDao {
 
     @Query("""
         INSERT INTO character_table (id, cursor, name, species, homeworld, favorite) VALUES (:id, :cursor, :name, :species, :homeworld, 0)
-    """)
+    """) // TODO : WHY THIS STRINGS LIKE THAT?
     fun insertCharacter(
         id: String,
         cursor: String,

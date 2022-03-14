@@ -24,7 +24,7 @@ import javax.inject.Inject
 class CharactersRepositoryImpl @Inject constructor(
     private val apolloClient: ApolloClient,
     private val charactersDao: CharactersDao,
-    private val mapperForNetwork: DomainMapper<CharacterEntity, CharactersListQuery.Node>,
+    private val mapperForNetwork: DomainMapper<CharacterEntity, CharactersListQuery.Node>, // TODO: not in use??
     private val database: CharactersDatabase
 ) : CharactersRepository {
 

@@ -23,5 +23,5 @@ class DatabaseModule {
     @Provides
     fun providesCharactersDao(charactersDatabase: CharactersDatabase): CharactersDao {
         return charactersDatabase.charactersDao
-    }
+    } // TODO: you dont need to inject daos
 }
